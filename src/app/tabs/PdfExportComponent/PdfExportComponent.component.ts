@@ -1,18 +1,18 @@
-import { NgFor } from '@angular/common';
+import { NgFor, NgIf } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { ColDef, GridApi, ModuleRegistry } from 'ag-grid-community';
 import { AllEnterpriseModule } from 'ag-grid-enterprise';
 import { AgGridAngular, AgGridModule } from 'ag-grid-angular';
-
+import { DatePipe } from '@angular/common';
 ModuleRegistry.registerModules([AllEnterpriseModule]);
-
 @Component({
   selector: 'app-PdfExportComponent',
   templateUrl: './PdfExportComponent.component.html',
   styleUrls: ['./PdfExportComponent.component.css'],
   standalone: true,
-  imports: [ReactiveFormsModule, NgFor, AgGridAngular, AgGridModule]
+  imports: [ReactiveFormsModule, NgFor, NgIf, AgGridAngular, AgGridModule],
+  providers: [DatePipe],
 })
 export class PdfExportComponentComponent implements OnInit {
   rowData = [
@@ -132,85 +132,219 @@ export class PdfExportComponentComponent implements OnInit {
       scheduled: 'Y',
       lastScheduledDate: '05-May-2024 11:00 AM',
       alert: 'Y',
-    }
+    },
   ];
-
-
+  selectedRowData: any;
   columnDefs: ColDef[] = [
-    { field: 'ruleName', headerName: 'Rule Name', sortable: true, filter: true, editable: true, headerCheckboxSelection: true, checkboxSelection: true },
-    { field: 'active', headerName: 'Active', sortable: true, filter: true, editable: true },
-    { field: 'type', headerName: 'Type', sortable: true, filter: true, editable: true },
-    { field: 'subType', headerName: 'Subtype', sortable: true, filter: true, editable: true },
-    { field: 'impacted', headerName: 'Impacted', sortable: true, filter: true, editable: true },
-    { field: 'alert', headerName: 'Alert', sortable: true, filter: true, editable: true },
-    { field: 'lastScheduledDate', headerName: 'LastScheduledDate', sortable: true, filter: true, editable: true },
-    { field: 'scheduled', headerName: 'Scheduled', sortable: true, filter: true, editable: true }
+    {
+      field: 'ruleName',
+      headerName: 'Rule Name',
+      sortable: true,
+      filter: true,
+      editable: true,
+      headerCheckboxSelection: true,
+      checkboxSelection: true,
+    },
+    {
+      field: 'active',
+      headerName: 'Active',
+      sortable: true,
+      filter: true,
+      editable: true,
+    },
+    {
+      field: 'type',
+      headerName: 'Type',
+      sortable: true,
+      filter: true,
+      editable: true,
+    },
+    {
+      field: 'subType',
+      headerName: 'Subtype',
+      sortable: true,
+      filter: true,
+      editable: true,
+    },
+    {
+      field: 'impacted',
+      headerName: 'Impacted',
+      sortable: true,
+      filter: true,
+      editable: true,
+    },
+    {
+      field: 'alert',
+      headerName: 'Alert',
+      sortable: true,
+      filter: true,
+      editable: true,
+    },
+    {
+      field: 'lastScheduledDate',
+      headerName: 'LastScheduledDate',
+      sortable: true,
+      filter: true,
+      editable: true,
+    },
+    {
+      field: 'scheduled',
+      headerName: 'Scheduled',
+      sortable: true,
+      filter: true,
+      editable: true,
+    },
   ];
-
   defaultColDef: ColDef = {
     sortable: true,
-    filter: true
+    filter: true,
   };
-
-  gridApi:any;
+  gridApi: any;
   formData: FormGroup;
-
-  constructor(private fb: FormBuilder) {
+  checktrue: boolean = true;
+  datacheck: boolean = false;
+  constructor(private fb: FormBuilder, private datePipe: DatePipe) {
     this.formData = this.fb.group({
       ruleName: [''],
       type: [''],
-      alert: ['']
+      alert: [''],
     });
   }
-
-  ngOnInit(): void {}
-
+  ngOnInit(): void {
+    this.formData = this.fb.group({
+      id: [this.generateUniqueId()],
+      ruleName: [''],
+      type: [''],
+      subType: [''],
+      impacted: [0],
+      alert: ['N'],
+      lastScheduledDate: [''],
+      scheduled: ['N'],
+      active: ['Y'],
+      favourite: ['N'],
+      domain: [''],
+    });
+  }
   onGridReady(params: any) {
     this.gridApi = params.api;
   }
-
   onSelectionChanged(event: any) {
     const selectedData = event.api.getSelectedRows();
     console.log('Selected Rows:', selectedData);
+    if (selectedData.length === 0) {
+      this.checktrue = true; // Reset the form with default values (you can customize these)
+      this.formData.reset({
+        id: this.generateUniqueId(),
+        ruleName: '',
+        type: '',
+        subType: '',
+        impacted: 0,
+        alert: 'N',
+        lastScheduledDate: '',
+        scheduled: 'N',
+        active: 'Y',
+        favourite: 'N',
+        domain: '',
+      });
+    }
   }
-
   toggleImpactedColumn() {
-    const colDef = this.columnDefs.find(c => c.field === 'impacted');
+    const colDef = this.columnDefs.find((c) => c.field === 'impacted');
     if (colDef) {
       colDef.hide = !colDef.hide;
       this.gridApi.setColumnDefs(this.columnDefs);
     }
   }
-
   toggleColumn(event: Event) {
     const selectElement = event.target as HTMLSelectElement;
     const selectedField = selectElement.value;
-    this.columnDefs = this.columnDefs.filter(col => col.field !== selectedField);
+    this.columnDefs = this.columnDefs.filter(
+      (col) => col.field !== selectedField
+    );
     this.gridApi.setColumnDefs(this.columnDefs);
   }
-
   saveData() {
     const selectedRows = this.gridApi.getSelectedRows();
     console.log('Saving data:', selectedRows);
     localStorage.setItem('savedRows', JSON.stringify(selectedRows));
     alert('Data saved to localStorage!');
   }
-
   updateData() {
-    const selectedNodes = this.gridApi.getSelectedNodes();
-    selectedNodes.forEach((node: any) => {
-      const data = node.data;
-      // Example update: add a sample logic, like updating a field
-      data.alert = data.alert === 'Y' ? 'N' : 'Y'; // Toggle alert
-      node.setData(data);
-    });
-
-    const allData: any[] = [];
-    this.gridApi.forEachNode((node: any) => {
-      allData.push(node.data);
-    });
-
-    console.log('All updated Data:', allData);
-    alert('Selected rows updated!');
+    if (this.selectedRowData) {
+      const updatedRow = this.formData.value; // Make sure the updated row has the original ID
+      updatedRow.id = this.selectedRowData.id; // Format the date before updating
+      const formattedDate = this.datePipe.transform(
+        updatedRow.lastScheduledDate,
+        'dd-MMM-yyyy hh:mm a'
+      );
+      updatedRow.lastScheduledDate = formattedDate ?? ''; // Update the data in the grid
+      this.gridApi.forEachNode((node: any) => {
+        if (node.data.id === updatedRow.id) {
+          node.setData(updatedRow);
+        }
+      });
+      this.datacheck = true;
+      alert('Data updated!');
+    }
+  }
+  onRowClicked(event: any) {
+    this.checktrue = false;
+    this.selectedRowData = event.data;
+    const selectedRowCopy = { ...this.selectedRowData }; // Convert '01-May-2024 01:15 PM' → '2024-05-01T13:15'
+    if (selectedRowCopy.lastScheduledDate) {
+      const date = this.convertToDateTimeLocalFormat(
+        selectedRowCopy.lastScheduledDate
+      );
+      selectedRowCopy.lastScheduledDate = date;
+    }
+    this.formData.patchValue(selectedRowCopy);
+  }
+  convertToDateTimeLocalFormat(dateStr: string): string {
+    // Try parsing '01-May-2024 01:15 PM' format to Date
+    const parsedDate = new Date(Date.parse(dateStr.replace(/-/g, ' ')));
+    if (isNaN(parsedDate.getTime())) {
+      return '';
+    }
+    const yyyy = parsedDate.getFullYear();
+    const mm = String(parsedDate.getMonth() + 1).padStart(2, '0');
+    const dd = String(parsedDate.getDate()).padStart(2, '0');
+    const hh = String(parsedDate.getHours()).padStart(2, '0');
+    const mi = String(parsedDate.getMinutes()).padStart(2, '0');
+    return `${yyyy}-${mm}-${dd}T${hh}:${mi}`;
+  }
+  addRow() {
+    if (this.datacheck) {
+      this.datacheck = false;
+      return;
+    }
+    if (this.formData.valid && this.gridApi) {
+      const newRow = this.formData.value; // Format date
+      const formattedDate = this.datePipe.transform(
+        newRow.lastScheduledDate,
+        'dd-MMM-yyyy hh:mm a'
+      );
+      newRow.lastScheduledDate = formattedDate ?? '';
+      newRow.id = this.generateUniqueId(); // Assign unique ID      // Update local rowData array
+      this.rowData = [...this.rowData, newRow]; // Add the row using the AG Grid transaction API
+      this.gridApi.applyTransaction({ add: [newRow] }); // Reset form with default values
+      this.formData.reset({
+        id: this.generateUniqueId(),
+        ruleName: '',
+        type: '',
+        subType: '',
+        impacted: 0,
+        alert: 'N',
+        lastScheduledDate: '',
+        scheduled: 'N',
+        active: 'Y',
+        favourite: 'N',
+        domain: '',
+      });
+      alert('Row added to grid!');
+    }
+  }
+  generateUniqueId(): number {
+    const ids = this.rowData.map((item) => item.id);
+    return Math.max(...ids) + 1;
   }
 }
