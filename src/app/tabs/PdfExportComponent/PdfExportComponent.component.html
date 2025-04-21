@@ -1,0 +1,26 @@
+<div class="container mt-4">
+  <div class="ag-theme-quartz mb-4" style="width: 100%; height: 300px;">
+    <ag-grid-angular
+      [rowData]="rowData"
+      style="width: 100%; height: 300px;"
+      [columnDefs]="columnDefs"
+      [defaultColDef]="defaultColDef"
+      rowSelection="multiple"
+      (selectionChanged)="onSelectionChanged($event)"
+      (gridReady)="onGridReady($event)">
+    </ag-grid-angular>
+  </div>
+  <div class="d-flex gap-3">
+    <button class="btn btn-success" (click)="saveData()">Save Data</button>
+    <button class="btn btn-info text-white" (click)="updateData()">Update Data</button>
+      <select
+      id="columnSelect"
+      class="form-select w-auto d-inline-block"
+      (change)="toggleColumn($event)">
+      <option selected>Remove Column</option>
+      <option *ngFor="let col of columnDefs" [value]="col.field">
+        {{ col.headerName }}
+      </option>
+    </select>
+  </div>
+</div>

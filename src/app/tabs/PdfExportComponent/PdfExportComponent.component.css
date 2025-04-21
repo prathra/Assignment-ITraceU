@@ -1,0 +1,15 @@
+/* PdfExportComponent.component.css */
+.container {
+  background-color: #f8f9fa;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.05);
+}
+.ag-theme-quartz {
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid #dee2e6;
+}
+h3 {
+  font-weight: 600;
+}

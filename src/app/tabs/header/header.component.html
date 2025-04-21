@@ -1,0 +1,36 @@
+<!-- Header -->
+<!-- Header -->
+<header class="row bg-primary  text-white p-3 align-items-center">
+  <div class="col-md-6">
+    <h3 class="mb-0">Cricket Info</h3>
+  </div>
+  <div class="col-md-6 text-end">
+    <button class="btn btn-light" (click)="printAsPDF()" [disabled]="isExporting">
+      <span *ngIf="!isExporting">📄 Save as PDF</span>
+      <span *ngIf="isExporting">Processing...</span>
+    </button>
+  </div>
+</header>
+<!-- PDF loading overlay -->
+<div class="pdf-loading-overlay" *ngIf="isExporting">
+  <div class="loading-message">
+    <div class="spinner-border text-primary mb-3" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+    <h4>Preparing Document...</h4>
+    <p>A print dialog will open automatically. Select "Save as PDF" option.</p>
+  </div>
+</div>
+<!-- Hidden content for PDF -->
+<div #pdfContent [style.display]="showPdfContent ? 'block' : 'none'" class="pdf-content">
+  <div class="pdf-section">
+    <app-firstTab></app-firstTab>
+  </div>
+  <hr />
+  <div class="pdf-section">
+    <app-secondTab></app-secondTab>
+  </div>
+  <div class="pdf-section">
+    <app-thirdTab></app-thirdTab>
+  </div>
+</div>

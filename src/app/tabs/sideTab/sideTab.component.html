@@ -1,0 +1,28 @@
+<div class="d-flex flex-column flex-shrink-0 p-3 bg-dark vh-100 " >
+  <ul class="nav nav-pills flex-column mb-auto">
+    <li class="nav-item">
+      <a (click)="setActive('Insights')"
+      [ngClass]="{ active: activeLink === 'Insights' }"routerLink="Insights" class="nav-link link-light" >
+         Insights
+      </a>
+    </li>
+    <li>
+      <a (click)="setActive('stats')"
+      [ngClass]="{ active: activeLink === 'stats' }"routerLink="Technology" class="nav-link link-light">
+        Technology & Stats
+      </a>
+    </li>
+    <li>
+      <a (click)="setActive('legend')"
+      [ngClass]="{ active: activeLink === 'legend' }"routerLink="Legend" class="nav-link link-light">
+        Legend
+      </a>
+    </li>
+    <li>
+      <a (click)="setActive('task')"
+      [ngClass]="{ active: activeLink === 'task' }"routerLink="Task" class="nav-link link-light">
+         Assignment
+      </a>
+    </li>
+  </ul>
+</div>
