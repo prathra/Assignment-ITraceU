@@ -1,10 +1,11 @@
 import { NgFor, NgIf } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ColDef, GridApi, ModuleRegistry } from 'ag-grid-community';
 import { AllEnterpriseModule } from 'ag-grid-enterprise';
 import { AgGridAngular, AgGridModule } from 'ag-grid-angular';
 import { DatePipe } from '@angular/common';
+import { ToastrService } from 'ngx-toastr';
 ModuleRegistry.registerModules([AllEnterpriseModule]);
 @Component({
   selector: 'app-PdfExportComponent',
@@ -203,7 +204,7 @@ export class PdfExportComponentComponent implements OnInit {
   formData: FormGroup;
   checktrue: boolean = true;
   datacheck: boolean = false;
-  constructor(private fb: FormBuilder, private datePipe: DatePipe) {
+  constructor(private fb: FormBuilder, private datePipe: DatePipe,private toastr: ToastrService) {
     this.formData = this.fb.group({
       ruleName: [''],
       type: [''],
@@ -213,9 +214,9 @@ export class PdfExportComponentComponent implements OnInit {
   ngOnInit(): void {
     this.formData = this.fb.group({
       id: [this.generateUniqueId()],
-      ruleName: [''],
-      type: [''],
-      subType: [''],
+      ruleName: ['',Validators.required],
+      type: ['',Validators.required],
+      subType: ['',Validators.required],
       impacted: [0],
       alert: ['N'],
       lastScheduledDate: [''],
@@ -224,6 +225,9 @@ export class PdfExportComponentComponent implements OnInit {
       favourite: ['N'],
       domain: [''],
     });
+  }
+  showSuccess() {
+    this.toastr.error('Fill all required field!');
   }
   onGridReady(params: any) {
     this.gridApi = params.api;
@@ -284,7 +288,7 @@ export class PdfExportComponentComponent implements OnInit {
         }
       });
       this.datacheck = true;
-      alert('Data updated!');
+      this.toastr.success('Data updated!');
     }
   }
   onRowClicked(event: any) {
@@ -319,6 +323,7 @@ export class PdfExportComponentComponent implements OnInit {
     }
     if (this.formData.valid && this.gridApi) {
       const newRow = this.formData.value; // Format date
+
       const formattedDate = this.datePipe.transform(
         newRow.lastScheduledDate,
         'dd-MMM-yyyy hh:mm a'
@@ -340,7 +345,10 @@ export class PdfExportComponentComponent implements OnInit {
         favourite: 'N',
         domain: '',
       });
-      alert('Row added to grid!');
+      this.toastr.success('Row added to grid!');
+    }else{
+      this.showSuccess();
+
     }
   }
   generateUniqueId(): number {

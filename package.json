@@ -10,7 +10,7 @@
   },
   "private": true,
   "dependencies": {
-    "@angular/animations": "^19.0.0",
+    "@angular/animations": "^19.2.7",
     "@angular/common": "^19.0.0",
     "@angular/compiler": "^19.0.0",
     "@angular/core": "^19.0.0",
@@ -26,6 +26,7 @@
     "html2pdf": "^0.0.11",
     "html2pdf.js": "^0.10.3",
     "jspdf": "^3.0.1",
+    "ngx-toastr": "^19.0.0",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.15.0"
