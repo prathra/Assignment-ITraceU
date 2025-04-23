@@ -5,7 +5,7 @@
     <h3 class="mb-0">Cricket Info</h3>
   </div>
   <div class="col-md-6 text-end">
-    <button class="btn btn-light" (click)="printAsPDF()" [disabled]="isExporting">
+    <button class="btn btn-success" (click)="printAsPDF()" [disabled]="isExporting">
       <span *ngIf="!isExporting">📄 Save as PDF</span>
       <span *ngIf="isExporting">Processing...</span>
     </button>

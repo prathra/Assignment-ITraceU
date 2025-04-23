@@ -1,0 +1,100 @@
+.cricket-tech-section {
+  padding: 10px 30px;
+  background: linear-gradient(to right, #f1faff, #e6f0ff);
+  font-family: 'Segoe UI', sans-serif;
+  color: #1c1c1c;
+}
+
+.cricket-tech-header {
+  text-align: center;
+  font-size: 2.7rem;
+  font-weight: 700;
+  color: #0a295f;
+  margin-bottom: 20px;
+}
+
+.tech-intro {
+  text-align: center;
+  font-size: 1.1rem;
+  max-width: 850px;
+  margin: 0 auto 40px;
+  color: #333;
+}
+
+.tech-image {
+  width: 100%;
+  border-radius: 12px;
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.15);
+}
+
+.highlight-card {
+  background: #ffffff;
+  border-left: 5px solid #0d6efd;
+  border-radius: 10px;
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+}
+
+.highlight-card h5 {
+  font-size: 1.2rem;
+  color: #0d47a1;
+  font-weight: 600;
+}
+
+.highlight-card p {
+  margin-bottom: 0;
+  font-size: 0.95rem;
+  color: #444;
+}
+
+.info-row-title {
+  font-size: 1.4rem;
+  font-weight: bold;
+  margin-top: 50px;
+  color: #0a3166;
+  text-align: center;
+}
+
+.tech-link {
+  display: inline-block;
+  margin-top: 30px;
+  text-align: center;
+  font-weight: bold;
+  color: #007bff;
+  text-decoration: none;
+}
+
+.tech-link:hover {
+  text-decoration: underline;
+}
+
+.stats-facts {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  gap: 20px;
+  margin-top: 30px;
+}
+
+.fact-box {
+  background-color: #e3f2fd;
+  padding: 20px;
+  border-radius: 10px;
+  flex: 1;
+  min-width: 240px;
+  text-align: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+}
+
+.fact-box h4 {
+  font-size: 2rem;
+  color: #0d6efd;
+  margin-bottom: 10px;
+}
+
+.fact-box p {
+  margin: 0;
+  color: #333;
+  font-size: 1rem;
+}
